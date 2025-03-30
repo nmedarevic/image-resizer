@@ -7,6 +7,68 @@
 </head>
 <body>
     <h1>Image resizer test</h1>
-    <img src="http://localhost:3000/resize/300/200/https%3A%2F%2Fimages.pexels.com%2Fphotos%2F1108099%2Fpexels-photo-1108099.jpeg" alt="Resized Image">
+    <br />
+    <br />
+    <div>
+        <div>
+            <label for="height">
+                <input type="number" id="height" value="100"/>
+                Height
+            </label>
+        </div>
+        <div>
+            <label for="width">
+                <input type="number" id="width" value="100"/>
+                Width
+            </label>
+        </div>
+        <div>
+            <label for="url">
+                <input type="text" id="url" value="https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg"/>
+                Url
+            </label>
+        </div>
+        <div>
+            <button type="button" id="resize-image-btn">Submit</button>
+        </div>
+    </div>
+    <img id="image" src="" alt="Resized Image">
+
+    <!-- http://localhost:3000/resize/300/200/https%3A%2F%2Fimages.pexels.com%2Fphotos%2F1108099%2Fpexels-photo-1108099.jpeg -->
+     <script>
+        function onClick() {
+            const height = document.getElementById('height').value;
+            const width = document.getElementById('width').value;
+            const url = document.getElementById('url').value;
+
+            const encodedUrl = encodeURIComponent(url);
+            
+            // Find the image element
+            const imgElement = document.getElementById('image');
+            
+            const src = `http://localhost:3000/resize/${width}/${height}/${encodedUrl}`
+            
+            imgElement.src = src;
+            
+            // Set height and width if provided
+            if (height) {
+                imgElement.height = height;
+            }
+            
+            if (width) {
+                imgElement.width = width;
+            }
+            
+            console.log('Image src updated with:', {
+                src: encodedUrl,
+                height: height || 'auto',
+                width: width || 'auto'
+            });
+        }
+        
+
+        const button = document.getElementById('resize-image-btn');
+        button.addEventListener('click', onClick);
+     </script>
 </body>
 </html>
