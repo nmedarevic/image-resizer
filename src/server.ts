@@ -1,9 +1,11 @@
 import { debug } from "console";
 import { createServer } from "./create-server";
 import { addRoutes } from "./routes";
+import { staticRoute } from "./routes/static.route";
 
 const {app, port} = createServer({
-  addRoutes
+  addRoutes,
+  addStaticRoutes: staticRoute
 })
 
 const server = app.listen(port, () => {
