@@ -1,39 +1,24 @@
 import { Router } from 'express';
 import sharp from 'sharp'
 import { Readable } from 'stream';
+import {getNumberParamMiddleware} from "../middleware/number-params.middleware"
+import {getUrlDecodeMiddleware} from "../middleware/url-decode.middleware"
 
 const router = Router();
 
-router.get('/resize/:width/:height/:urlEncodedUrl', async (req, res, next) => {
-  const { width, height, urlEncodedUrl } = req.params;
-  console.log('\n\n', req.params, '\n\n');
+const widthMiddleware = getNumberParamMiddleware("width")
+const heightMiddleware = getNumberParamMiddleware("height")
+const urlMiddleware = getUrlDecodeMiddleware("urlEncodedUrl")
 
-  const parsedWidth = Number(width) 
-  const parsedHeight = Number(height) 
-
-  console.log('\n\n', parsedWidth, '\n\n');
-  console.log('\n\n', parsedHeight, '\n\n');
+router.get('/resize/:width/:height/:urlEncodedUrl', heightMiddleware, widthMiddleware, urlMiddleware, async (req, res, next) => {
+  const { width, height, urlEncodedUrl } = res.locals;
   
-  if (parsedWidth === 0 || isNaN(parsedWidth)) {
-    res.status(400)
-    res.send("Invalid width")
-    return;
-  }
-
-  if (parsedHeight === 0 || isNaN(parsedHeight)) {
-    res.status(400)
-    res.send("Invalid height")
-    return;
-  }
-
-  const url = decodeURIComponent(urlEncodedUrl)
-
-  const imageResponse = await fetch(url)
+  const imageResponse = await fetch(urlEncodedUrl)
   const imageArrayBuffer = await imageResponse.arrayBuffer();
   const buffer = Buffer.from(imageArrayBuffer)
 
   const stream = await sharp(buffer)
-  .resize(200, 200)
+  .resize(width, height)
   .toBuffer()
   
   const readable = new Readable({
