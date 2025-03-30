@@ -4,6 +4,8 @@ This repository contains a simple node server which transforms the image.
 
 ## How to start
 
+> npm i
+
 > npm run start
 
 Navigate to

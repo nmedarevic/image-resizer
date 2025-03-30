@@ -10,6 +10,7 @@ const {app, port} = createServer({
 
 const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`)
+  console.log(`Open http://localhost:${port} to start!`) 
 })
 
 process.on('SIGTERM', () => {
