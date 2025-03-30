@@ -12,3 +12,5 @@ Navigate to
 
 That will show a basic page with a few inputs. Play around with the inputs and click "Submit"
 Image will be shown below.
+
+> If you want to change the default port, copy .env.dist into .env and change the value
