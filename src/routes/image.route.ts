@@ -9,23 +9,21 @@ router.get('/resize/:width/:height/:urlEncodedUrl', async (req, res, next) => {
   console.log('\n\n', req.params, '\n\n');
 
   const url = decodeURIComponent(urlEncodedUrl)
-console.log('\n\n', url, '\n\n');
+
   const imageResponse = await fetch(url)
   const imageArrayBuffer = await imageResponse.arrayBuffer();
   const buffer = Buffer.from(imageArrayBuffer)
 
-  const stream = await sharp()
+  const stream = await sharp(buffer)
   .resize(200, 200)
-  .composite([{
-    input: buffer
-  }])
   .toBuffer()
-
-  const readable = new Readable()
-  readable._read = () => {} // _read is required but you can noop it
+  
+  const readable = new Readable({
+    read: () => {}
+  })
   readable.push(stream)
   readable.push(null)
-
+ 
   readable.pipe(res)
 })
 
